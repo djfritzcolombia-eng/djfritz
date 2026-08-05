@@ -1,50 +1,27 @@
 import { Link } from 'react-router-dom'
 import { Hero } from '../components/Hero'
-import { Featured } from '../components/Featured'
-import { Brands } from '../components/Brands'
-import { About } from '../components/About'
-import { departmentMenu } from '../data/menu'
-import { catalogBySection } from '../data/catalog'
 import './HomePage.css'
 
 export function HomePage() {
   return (
     <>
       <Hero />
-
-      <section className="section home-dirs">
-        <div className="container">
-          <div className="section__head">
-            <h2 className="section__title">Explora por categoría</h2>
-            <Link className="section__link" to="/marcas">
-              Ver marcas
-            </Link>
-          </div>
-          <div className="home-dirs__grid">
-            {departmentMenu.map((dept) => {
-              const count = dept.section ? catalogBySection[dept.section].length : 0
-              return (
-                <Link key={dept.id} className="home-dirs__card" to={dept.path}>
-                  <strong>{dept.label}</strong>
-                  <span>{count} productos</span>
-                  <em>Ver página →</em>
-                </Link>
-              )
-            })}
-          </div>
+      <section className="home-strip">
+        <div className="home-strip__grid">
+          <Link to="/musica" className="home-strip__item">
+            <span>Música</span>
+            <strong>Escucha los sets</strong>
+          </Link>
+          <Link to="/shows" className="home-strip__item">
+            <span>Shows</span>
+            <strong>Próximas fechas</strong>
+          </Link>
+          <Link to="/contacto" className="home-strip__item">
+            <span>Booking</span>
+            <strong>Contrata a Fritz</strong>
+          </Link>
         </div>
       </section>
-
-      <Featured />
-      <Brands />
-      <About
-        compact
-        cta={
-          <Link className="section__link" to="/contacto">
-            Ir a contacto
-          </Link>
-        }
-      />
     </>
   )
 }

@@ -1,0 +1,54 @@
+.home-dirs__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+}
+
+.home-dirs__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.15rem 1rem;
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s var(--ease), transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.home-dirs__card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.home-dirs__card strong {
+  font-size: 1.05rem;
+  color: var(--primary);
+}
+
+.home-dirs__card span {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.home-dirs__card em {
+  margin-top: 0.35rem;
+  font-style: normal;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+@media (max-width: 900px) {
+  .home-dirs__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .home-dirs__grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { site } from '../data/site'
 import './Footer.css'
 
 export function Footer() {
@@ -8,8 +9,12 @@ export function Footer() {
         <Link className="site-footer__brand" to="/" aria-label="Fritz">
           <img src="/logo-fritz-white.png" alt="Fritz" width={140} height={58} />
         </Link>
-        <p>Shows · Música · Booking</p>
-        <p className="site-footer__copy">© {new Date().getFullYear()} Fritz · www.djfritz.com</p>
+        <p>
+          <a href={`tel:${site.phoneTel}`}>{site.phone}</a>
+          {' · '}
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+        <p className="site-footer__copy">© {new Date().getFullYear()} Fritz · {site.domain}</p>
       </div>
     </footer>
   )

@@ -24,7 +24,7 @@ export function Hero() {
           <Link className="btn btn--accent" to="/shows">
             Ver shows
           </Link>
-          <Link className="btn btn--ghost" to="/musica">
+          <Link className="btn btn--ghost" to="/escuchar">
             Escuchar
           </Link>
         </div>

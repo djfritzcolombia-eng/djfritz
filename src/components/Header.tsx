@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { useCart } from '../cart/CartContext'
 import './Header.css'
 
 const leftNav = [
   { to: '/shows', label: 'Shows' },
   { to: '/shop', label: 'Shop' },
-  { to: '/musica', label: 'Música' },
+  { to: '/escuchar', label: 'Escuchar' },
 ]
 
 const rightNav = [
-  { to: '/noticias', label: 'Noticias' },
+  { to: '/beats', label: 'Beats' },
   { to: '/bio', label: 'Bio' },
   { to: '/contacto', label: 'Contacto' },
 ]
@@ -17,6 +18,7 @@ const rightNav = [
 export function Header() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { count, setOpen: setCartOpen } = useCart()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -47,13 +49,23 @@ export function Header() {
           <img src="/logo-fritz-white.png" alt="Fritz" width={160} height={67} />
         </Link>
 
-        <nav className="site-header__nav site-header__nav--right" aria-label="Principal derecha">
-          {rightNav.map((item) => (
-            <NavLink key={item.to} to={item.to} onClick={() => setOpen(false)}>
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
+        <div className="site-header__right">
+          <nav className="site-header__nav site-header__nav--right" aria-label="Principal derecha">
+            {rightNav.map((item) => (
+              <NavLink key={item.to} to={item.to} onClick={() => setOpen(false)}>
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+          <button
+            type="button"
+            className="site-header__cart"
+            aria-label={`Carrito${count ? `, ${count} productos` : ''}`}
+            onClick={() => setCartOpen(true)}
+          >
+            Bag{count > 0 ? ` (${count})` : ''}
+          </button>
+        </div>
 
         <button
           className="site-header__menu"
@@ -75,6 +87,15 @@ export function Header() {
               {item.label}
             </NavLink>
           ))}
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false)
+              setCartOpen(true)
+            }}
+          >
+            Carrito{count > 0 ? ` (${count})` : ''}
+          </button>
         </nav>
       </div>
     </header>

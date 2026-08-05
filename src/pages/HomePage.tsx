@@ -8,17 +8,17 @@ export function HomePage() {
       <Hero />
       <section className="home-strip">
         <div className="home-strip__grid">
-          <Link to="/musica" className="home-strip__item">
-            <span>Música</span>
-            <strong>Escucha los sets</strong>
+          <Link to="/escuchar" className="home-strip__item">
+            <span>Escuchar</span>
+            <strong>Sets · Beats · Remix</strong>
           </Link>
           <Link to="/shows" className="home-strip__item">
             <span>Shows</span>
-            <strong>Próximas fechas</strong>
+            <strong>Fotos y videos</strong>
           </Link>
-          <Link to="/contacto" className="home-strip__item">
-            <span>Booking</span>
-            <strong>Contrata a Fritz</strong>
+          <Link to="/beats" className="home-strip__item">
+            <span>Beats</span>
+            <strong>Compra o agenda</strong>
           </Link>
         </div>
       </section>

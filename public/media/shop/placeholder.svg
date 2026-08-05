@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <rect width="800" height="1000" fill="#1a1a1a"/>
+  <rect x="60" y="60" width="680" height="880" fill="none" stroke="#a83232" stroke-width="2"/>
+  <text x="400" y="520" fill="#f2f2f2" font-family="Arial" font-size="40" text-anchor="middle">MERCH</text>
+</svg>

@@ -1,0 +1,115 @@
+.photo-manager {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.photo-manager__head h2 {
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.photo-manager__head p {
+  color: var(--muted);
+  font-size: 0.92rem;
+  max-width: 60ch;
+  line-height: 1.5;
+}
+
+.photo-manager__controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.photo-manager__controls label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.photo-manager__controls input {
+  min-height: 2.5rem;
+  border: 1px solid var(--line);
+  background: #0a0a0a;
+  color: var(--text);
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+}
+
+.photo-manager__msg {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.photo-manager__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.photo-manager__card {
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  display: grid;
+}
+
+.photo-manager__card img,
+.photo-manager__card > div:first-child {
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  object-fit: cover;
+  background: #111;
+}
+
+.photo-manager__fields {
+  padding: 0.8rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.photo-manager__fields label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.photo-manager__fields input {
+  min-height: 2.2rem;
+  border: 1px solid var(--line);
+  background: #0a0a0a;
+  color: var(--text);
+  padding: 0.4rem 0.55rem;
+  font: inherit;
+}
+
+.photo-manager__meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.photo-manager__delete {
+  width: 100%;
+}
+
+.photo-manager__empty {
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .photo-manager__controls {
+    grid-template-columns: 1fr;
+  }
+}

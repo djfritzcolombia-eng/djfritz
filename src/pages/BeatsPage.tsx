@@ -30,6 +30,7 @@ export function BeatsPage() {
               title={beat.title}
               subtitle={`${beat.subtitle ?? ''} · ${formatPrice(beat.price ?? 0)}`}
               cover={beat.cover}
+              tags={beat.tags}
             />
             <button
               type="button"

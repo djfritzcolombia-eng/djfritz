@@ -9,8 +9,25 @@ import { ContentContext } from './content-context'
 function loadContent(): SiteContent {
   try {
     const raw = localStorage.getItem(CONTENT_KEY)
-    if (!raw) return structuredClone(seedContent)
-    return { ...structuredClone(seedContent), ...JSON.parse(raw) }
+    if (!raw) {
+      // Migrar v4 si existe
+      const legacy = localStorage.getItem('fritz-site-content-v4')
+      if (legacy) {
+        const parsed = JSON.parse(legacy) as Partial<SiteContent>
+        return {
+          ...structuredClone(seedContent),
+          ...parsed,
+          settings: { ...seedContent.settings, ...(parsed.settings ?? {}) },
+        }
+      }
+      return structuredClone(seedContent)
+    }
+    const parsed = JSON.parse(raw) as Partial<SiteContent>
+    return {
+      ...structuredClone(seedContent),
+      ...parsed,
+      settings: { ...seedContent.settings, ...(parsed.settings ?? {}) },
+    }
   } catch {
     return structuredClone(seedContent)
   }

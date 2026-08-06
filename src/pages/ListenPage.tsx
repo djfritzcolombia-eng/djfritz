@@ -80,6 +80,7 @@ export function ListenPage() {
                 title={beat.title}
                 subtitle={`${beat.subtitle ?? ''}${beat.bpm ? ` · ${beat.bpm} BPM` : ''}${beat.price ? ` · ${formatPrice(beat.price)}` : ''}`}
                 cover={beat.cover}
+                tags={beat.tags}
               />
               <button
                 type="button"

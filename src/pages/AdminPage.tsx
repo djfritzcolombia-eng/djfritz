@@ -3,15 +3,33 @@ import { type SiteContent } from '../data/site'
 import { useContent } from '../content/content-context'
 import { PhotoManager } from '../components/PhotoManager'
 import { VideoManager } from '../components/VideoManager'
+import { BeatManager } from '../components/BeatManager'
 import {
   loadAdminCreds,
   saveAdminCreds,
   verifyAdminLogin,
 } from '../lib/adminAuth'
+import './AdminPage.css'
 
 type Section = keyof SiteContent
+type AdminView =
+  | 'fotos'
+  | 'videos'
+  | 'beats'
+  | 'redes'
+  | 'seguridad'
+  | 'avanzado'
 
-const sections: { id: Section; label: string; help: string }[] = [
+const navItems: { id: AdminView; label: string; hint: string }[] = [
+  { id: 'fotos', label: 'Fotos', hint: 'Carpetas y galerías de shows' },
+  { id: 'videos', label: 'Videos', hint: 'YouTube o archivo desde PC' },
+  { id: 'beats', label: 'Beats', hint: 'Audio, portada, BPM y hashtags' },
+  { id: 'redes', label: 'Redes', hint: 'Instagram y presencia web' },
+  { id: 'seguridad', label: 'Seguridad', hint: 'Cambiar clave de acceso' },
+  { id: 'avanzado', label: 'Avanzado', hint: 'JSON sets / shop / remix' },
+]
+
+const advancedSections: { id: Section; label: string; help: string }[] = [
   {
     id: 'folders',
     label: 'Folders JSON',
@@ -20,27 +38,22 @@ const sections: { id: Section; label: string; help: string }[] = [
   {
     id: 'shows',
     label: 'Shows JSON',
-    help: 'Avanzado: media de shows. Usa los gestores visuales de arriba.',
+    help: 'Avanzado: media de shows.',
   },
   {
     id: 'sets',
     label: 'Sets (audio)',
-    help: 'Pon el MP3 en public/media/audio/ y usa src "/media/audio/archivo.mp3".',
-  },
-  {
-    id: 'beats',
-    label: 'Beats en venta',
-    help: 'Incluye price, bpm, cover y src del preview. inStock true/false.',
+    help: 'MP3 en public/media/audio/ → src "/media/audio/archivo.mp3".',
   },
   {
     id: 'remixes',
     label: 'Remix + download',
-    help: 'downloadable true y downloadUrl "/media/remixes/archivo.zip".',
+    help: 'downloadable true y downloadUrl.',
   },
   {
     id: 'shop',
     label: 'Shop merch',
-    help: 'category: camisas | gorras | chaquetas | hoodies. Imagen en /media/shop/.',
+    help: 'category: camisas | gorras | chaquetas | hoodies.',
   },
 ]
 
@@ -49,6 +62,7 @@ export function AdminPage() {
   const [authed, setAuthed] = useState(() => sessionStorage.getItem('fritz-admin') === '1')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [view, setView] = useState<AdminView>('fotos')
   const [section, setSection] = useState<Section>('sets')
   const [draft, setDraft] = useState('')
   const [msg, setMsg] = useState('')
@@ -57,6 +71,7 @@ export function AdminPage() {
   const [newPass, setNewPass] = useState('')
   const [confirmPass, setConfirmPass] = useState('')
   const [credMsg, setCredMsg] = useState('')
+  const [instagram, setInstagram] = useState(content.settings.instagram)
 
   const currentJson = useMemo(() => JSON.stringify(content[section], null, 2), [content, section])
 
@@ -100,6 +115,16 @@ export function AdminPage() {
     setNewPass('')
     setConfirmPass('')
     setCredMsg('Clave actualizada en este navegador.')
+  }
+
+  const saveInstagram = (e: React.FormEvent) => {
+    e.preventDefault()
+    const url = instagram.trim()
+    setContent({
+      ...content,
+      settings: { ...content.settings, instagram: url },
+    })
+    setMsg('Instagram guardado.')
   }
 
   const loadSection = (id: Section) => {
@@ -166,127 +191,156 @@ export function AdminPage() {
     )
   }
 
-  const help = sections.find((s) => s.id === section)?.help
+  const help = advancedSections.find((s) => s.id === section)?.help
   const creds = loadAdminCreds()
+  const activeNav = navItems.find((n) => n.id === view)
 
   return (
-    <div className="page" style={{ maxWidth: '64rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+    <div className="admin page">
+      <div className="admin__top">
         <div>
           <p className="page__eyebrow">Internal</p>
           <h1 className="page__title">Admin</h1>
           <p className="page__lead">Sesión: {creds.username}</p>
         </div>
-        <button type="button" className="btn btn--ghost" onClick={logout} style={{ alignSelf: 'start' }}>
+        <button type="button" className="btn btn--ghost" onClick={logout}>
           Cerrar sesión
         </button>
       </div>
 
-      <section style={{ margin: '2rem 0', maxWidth: '34rem' }}>
-        <h2 style={{ color: 'var(--accent)', fontSize: '1.35rem', marginBottom: '0.75rem' }}>
-          Seguridad
-        </h2>
-        <p style={{ color: 'var(--muted)', marginBottom: '1rem', fontSize: '0.9rem' }}>
-          Cambia la clave de acceso. Se guarda en este navegador.
-        </p>
-        <form className="form-grid" onSubmit={changePassword}>
-          <label>
-            Clave actual
-            <input
-              type="password"
-              value={currentPass}
-              onChange={(e) => setCurrentPass(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Nueva clave
-            <input
-              type="password"
-              value={newPass}
-              onChange={(e) => setNewPass(e.target.value)}
-              required
-              minLength={6}
-            />
-          </label>
-          <label>
-            Confirmar nueva clave
-            <input
-              type="password"
-              value={confirmPass}
-              onChange={(e) => setConfirmPass(e.target.value)}
-              required
-              minLength={6}
-            />
-          </label>
-          <button type="submit" className="btn btn--accent">
-            Guardar nueva clave
-          </button>
-          {credMsg && <p style={{ color: 'var(--accent)' }}>{credMsg}</p>}
-        </form>
-      </section>
+      <div className="admin__layout">
+        <nav className="admin__nav" aria-label="Secciones admin">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={view === item.id ? 'is-active' : ''}
+              onClick={() => {
+                setView(item.id)
+                setMsg('')
+                if (item.id === 'redes') setInstagram(content.settings.instagram)
+              }}
+            >
+              <strong>{item.label}</strong>
+              <span>{item.hint}</span>
+            </button>
+          ))}
+        </nav>
 
-      <PhotoManager />
-      <VideoManager />
+        <div className="admin__panel">
+          <header className="admin__panel-head">
+            <h2>{activeNav?.label}</h2>
+            <p>{activeNav?.hint}</p>
+          </header>
 
-      <h2 style={{ color: 'var(--accent)', fontSize: '1.35rem', marginBottom: '0.75rem' }}>
-        Otro contenido
-      </h2>
+          {view === 'fotos' && <PhotoManager />}
+          {view === 'videos' && <VideoManager />}
+          {view === 'beats' && <BeatManager />}
 
-      <div className="tabs">
-        {sections.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            className={section === s.id ? 'is-active' : ''}
-            onClick={() => loadSection(s.id)}
-          >
-            {s.label}
-          </button>
-        ))}
+          {view === 'redes' && (
+            <form className="form-grid" onSubmit={saveInstagram} style={{ maxWidth: '34rem' }}>
+              <label>
+                Instagram (URL completa)
+                <input
+                  value={instagram}
+                  onChange={(e) => setInstagram(e.target.value)}
+                  placeholder="https://www.instagram.com/tuusuario"
+                  required
+                />
+              </label>
+              <button type="submit" className="btn btn--accent">
+                Guardar Instagram
+              </button>
+              {msg && <p style={{ color: 'var(--accent)' }}>{msg}</p>}
+            </form>
+          )}
+
+          {view === 'seguridad' && (
+            <form className="form-grid" onSubmit={changePassword} style={{ maxWidth: '34rem' }}>
+              <label>
+                Clave actual
+                <input
+                  type="password"
+                  value={currentPass}
+                  onChange={(e) => setCurrentPass(e.target.value)}
+                  required
+                />
+              </label>
+              <label>
+                Nueva clave
+                <input
+                  type="password"
+                  value={newPass}
+                  onChange={(e) => setNewPass(e.target.value)}
+                  required
+                  minLength={6}
+                />
+              </label>
+              <label>
+                Confirmar nueva clave
+                <input
+                  type="password"
+                  value={confirmPass}
+                  onChange={(e) => setConfirmPass(e.target.value)}
+                  required
+                  minLength={6}
+                />
+              </label>
+              <button type="submit" className="btn btn--accent">
+                Guardar nueva clave
+              </button>
+              {credMsg && <p style={{ color: 'var(--accent)' }}>{credMsg}</p>}
+            </form>
+          )}
+
+          {view === 'avanzado' && (
+            <>
+              <div className="tabs">
+                {advancedSections.map((s) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    className={section === s.id ? 'is-active' : ''}
+                    onClick={() => loadSection(s.id)}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+              <p style={{ color: 'var(--muted)', marginBottom: '0.75rem', fontSize: '0.9rem' }}>{help}</p>
+              <textarea
+                value={draft || currentJson}
+                onChange={(e) => setDraft(e.target.value)}
+                onFocus={() => {
+                  if (!draft) setDraft(currentJson)
+                }}
+                className="admin__json"
+                spellCheck={false}
+              />
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem', marginTop: '1rem' }}>
+                <button type="button" className="btn btn--accent" onClick={saveSection}>
+                  Guardar sección
+                </button>
+                <button type="button" className="btn btn--ghost" onClick={exportAll}>
+                  Exportar JSON
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--ghost"
+                  onClick={() => {
+                    resetContent()
+                    setDraft(JSON.stringify(content[section], null, 2))
+                    setMsg('Contenido restaurado al semilla.')
+                  }}
+                >
+                  Reset semilla
+                </button>
+              </div>
+              {msg && <p style={{ color: 'var(--accent)', marginTop: '0.85rem' }}>{msg}</p>}
+            </>
+          )}
+        </div>
       </div>
-
-      <p style={{ color: 'var(--muted)', marginBottom: '0.75rem', fontSize: '0.9rem' }}>{help}</p>
-
-      <textarea
-        value={draft || currentJson}
-        onChange={(e) => setDraft(e.target.value)}
-        onFocus={() => {
-          if (!draft) setDraft(currentJson)
-        }}
-        style={{
-          width: '100%',
-          minHeight: '16rem',
-          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-          fontSize: '0.82rem',
-          background: '#0a0a0a',
-          color: 'var(--text)',
-          border: '1px solid var(--line)',
-          padding: '0.85rem',
-        }}
-        spellCheck={false}
-      />
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem', marginTop: '1rem' }}>
-        <button type="button" className="btn btn--accent" onClick={saveSection}>
-          Guardar sección
-        </button>
-        <button type="button" className="btn btn--ghost" onClick={exportAll}>
-          Exportar JSON
-        </button>
-        <button
-          type="button"
-          className="btn btn--ghost"
-          onClick={() => {
-            resetContent()
-            setDraft(JSON.stringify(content[section], null, 2))
-            setMsg('Contenido restaurado al semilla (incluye fotos Selina).')
-          }}
-        >
-          Reset semilla
-        </button>
-      </div>
-      {msg && <p style={{ color: 'var(--accent)', marginTop: '0.85rem' }}>{msg}</p>}
     </div>
   )
 }

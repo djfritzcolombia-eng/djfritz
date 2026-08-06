@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { YoutubeEmbed } from '../components/YoutubeEmbed'
 import { MediaImage } from '../components/MediaImage'
 import { AlbumPreview } from '../components/AlbumPreview'
+import { LocalVideo } from '../components/LocalVideo'
 import { useContent } from '../content/content-context'
 import { getMediaBlob, idbKeyFromSrc, isIdbSrc } from '../media/mediaDb'
 import type { ShowFolder, ShowMedia } from '../data/site'
@@ -41,7 +42,7 @@ export function ShowsPage() {
   const openFolder: ShowFolder | undefined = content.folders.find((f) => f.id === openFolderId)
   const folderItems = openFolderId ? (mediaByFolder.get(openFolderId) ?? []) : []
   const folderPhotos = folderItems.filter((i) => i.type === 'photo')
-  const folderVideos = folderItems.filter((i) => i.type === 'youtube')
+  const folderVideos = folderItems.filter((i) => i.type === 'youtube' || i.type === 'video')
 
   const activeItem = photos.find((s) => s.id === active)
 
@@ -118,7 +119,7 @@ export function ShowsPage() {
             const count =
               folder.kind === 'photos'
                 ? previewPhotos.length
-                : items.filter((i) => i.type === 'youtube').length
+                : items.filter((i) => i.type === 'youtube' || i.type === 'video').length
 
             return (
               <button
@@ -202,13 +203,17 @@ export function ShowsPage() {
             {openFolder.name} · {openFolder.location} · {folderVideos.length} videos
           </p>
           {folderVideos.length === 0 ? (
-            <p style={{ color: 'var(--muted)' }}>Sin videos aún. Agrégalos en Admin (YouTube ID).</p>
+            <p style={{ color: 'var(--muted)' }}>Sin videos aún. Agrégalos en Admin.</p>
           ) : (
             <div className="stack">
               {folderVideos.map((item) => (
                 <div key={item.id}>
                   <p style={{ marginBottom: '0.5rem', color: 'var(--muted)' }}>{item.title}</p>
-                  <YoutubeEmbed youtubeId={item.src} title={item.title} />
+                  {item.type === 'youtube' ? (
+                    <YoutubeEmbed youtubeId={item.src} title={item.title} />
+                  ) : (
+                    <LocalVideo src={item.src} title={item.title} />
+                  )}
                 </div>
               ))}
             </div>

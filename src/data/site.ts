@@ -19,7 +19,7 @@ export type ShowFolder = {
 
 export type ShowMedia = {
   id: string
-  type: 'photo' | 'youtube'
+  type: 'photo' | 'youtube' | 'video'
   title: string
   src: string
   thumb?: string
@@ -45,8 +45,13 @@ export type AudioTrack = {
 export type BeatProduct = AudioTrack & {
   bpm?: number
   key?: string
+  /** Hashtags / keywords SEO (sin #) ej. ["drake", "trap"] */
   tags?: string[]
   inStock: boolean
+}
+
+export type SiteSettings = {
+  instagram: string
 }
 
 export type ShopCategory = 'camisas' | 'gorras' | 'chaquetas' | 'hoodies'
@@ -120,6 +125,7 @@ export type SiteContent = {
   beats: BeatProduct[]
   remixes: AudioTrack[]
   shop: ShopProduct[]
+  settings: SiteSettings
 }
 
 export const seedContent: SiteContent = {
@@ -248,6 +254,9 @@ export const seedContent: SiteContent = {
       inStock: true,
     },
   ],
+  settings: {
+    instagram: 'https://www.instagram.com/',
+  },
 }
 
-export const CONTENT_KEY = 'fritz-site-content-v4'
+export const CONTENT_KEY = 'fritz-site-content-v5'

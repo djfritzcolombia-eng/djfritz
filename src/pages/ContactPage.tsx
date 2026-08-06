@@ -1,7 +1,11 @@
 import { site } from '../data/site'
 import { ClientForm } from '../components/ClientForm'
+import { useContent } from '../content/content-context'
 
 export function ContactPage() {
+  const { content } = useContent()
+  const instagram = content.settings.instagram?.trim()
+
   return (
     <div className="page">
       <p className="page__eyebrow">Registro</p>
@@ -14,7 +18,14 @@ export function ContactPage() {
       <ClientForm defaultIntent="booking" />
 
       <div className="stack" style={{ marginTop: '3rem', maxWidth: '28rem' }}>
-        <p style={{ color: 'var(--muted)', fontSize: '0.85rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+        <p
+          style={{
+            color: 'var(--muted)',
+            fontSize: '0.85rem',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+          }}
+        >
           Contacto directo
         </p>
         <a href={`tel:${site.phoneTel}`} className="btn btn--ghost">
@@ -31,6 +42,11 @@ export function ContactPage() {
         >
           WhatsApp
         </a>
+        {instagram && (
+          <a href={instagram} className="btn btn--ghost" target="_blank" rel="noreferrer">
+            Instagram
+          </a>
+        )}
       </div>
     </div>
   )

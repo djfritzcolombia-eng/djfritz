@@ -29,3 +29,15 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
+
+.site-footer__social a {
+  color: var(--accent);
+  font-family: var(--font-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.site-footer__social a:hover {
+  text-decoration: underline;
+}

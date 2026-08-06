@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { useResolvedSrc } from '../media/useResolvedSrc'
+import { MediaImage } from './MediaImage'
 import './AudioPlayer.css'
 
 type Props = {
@@ -6,10 +8,12 @@ type Props = {
   title: string
   subtitle?: string
   cover?: string
+  tags?: string[]
 }
 
-export function AudioPlayer({ src, title, subtitle, cover }: Props) {
+export function AudioPlayer({ src, title, subtitle, cover, tags }: Props) {
   const audioRef = useRef<HTMLAudioElement>(null)
+  const resolvedSrc = useResolvedSrc(src)
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
 
@@ -27,11 +31,16 @@ export function AudioPlayer({ src, title, subtitle, cover }: Props) {
       el.removeEventListener('timeupdate', onTime)
       el.removeEventListener('ended', onEnd)
     }
-  }, [src])
+  }, [resolvedSrc])
+
+  useEffect(() => {
+    setPlaying(false)
+    setProgress(0)
+  }, [resolvedSrc])
 
   const toggle = async () => {
     const el = audioRef.current
-    if (!el || !src) return
+    if (!el || !resolvedSrc) return
     if (playing) {
       el.pause()
       setPlaying(false)
@@ -42,20 +51,38 @@ export function AudioPlayer({ src, title, subtitle, cover }: Props) {
   }
 
   return (
-    <div className={`audio-player ${!src ? 'is-empty' : ''}`}>
-      {cover && <img className="audio-player__cover" src={cover} alt="" />}
+    <div className={`audio-player ${!resolvedSrc ? 'is-empty' : ''}`}>
+      {cover ? (
+        <MediaImage className="audio-player__cover" src={cover} alt="" />
+      ) : null}
       <div className="audio-player__meta">
         <strong>{title}</strong>
         {subtitle && <span>{subtitle}</span>}
+        {tags && tags.length > 0 && (
+          <div className="audio-player__tags">
+            {tags.map((tag) => (
+              <a
+                key={tag}
+                href={`https://www.google.com/search?q=${encodeURIComponent(`#${tag}`)}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
         <div className="audio-player__bar" aria-hidden>
           <i style={{ width: `${progress}%` }} />
         </div>
-        {!src && <em className="audio-player__hint">Sube el MP3 en /media/audio y enlázalo en Admin</em>}
+        {!resolvedSrc && (
+          <em className="audio-player__hint">Sin audio — súbelo desde Admin → Beats</em>
+        )}
       </div>
-      <button type="button" className="audio-player__btn" onClick={toggle} disabled={!src}>
+      <button type="button" className="audio-player__btn" onClick={toggle} disabled={!resolvedSrc}>
         {playing ? 'Pausa' : 'Play'}
       </button>
-      {src ? <audio ref={audioRef} src={src} preload="metadata" /> : null}
+      {resolvedSrc ? <audio ref={audioRef} src={resolvedSrc} preload="metadata" /> : null}
     </div>
   )
 }

@@ -1,19 +1,32 @@
 .site-header {
   position: fixed;
-  inset: 0 0 auto;
-  z-index: 40;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
   height: var(--header-h);
-  transition: background 0.35s var(--ease), backdrop-filter 0.35s var(--ease);
+  transition: background 0.35s var(--ease);
 }
 
-.site-header.is-scrolled,
+.site-header.is-scrolled:not(.is-open) {
+  background: rgba(0, 0, 0, 0.94);
+}
+
 .site-header.is-open {
-  background: rgba(17, 17, 17, 0.92);
-  backdrop-filter: blur(10px);
+  bottom: 0;
+  height: 100dvh;
+  height: 100svh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }
 
 .site-header__bar {
-  height: 100%;
+  position: relative;
+  z-index: 2;
+  flex: 0 0 var(--header-h);
+  height: var(--header-h);
   width: min(1200px, calc(100% - 2rem));
   margin-inline: auto;
   display: grid;
@@ -115,28 +128,48 @@
 }
 
 .site-header__drawer {
-  position: fixed;
-  inset: var(--header-h) 0 0;
-  background: var(--bg-deep);
-  padding: 2rem 1.5rem;
+  display: none;
+}
+
+.site-header.is-open .site-header__drawer {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  padding: 1.25rem 1.5rem 2.5rem;
+  background: #000;
+  border-top: 1px solid rgba(242, 242, 242, 0.12);
+}
+
+.site-header__drawer[hidden] {
+  display: none !important;
 }
 
 .site-header__drawer nav {
   display: grid;
-  gap: 1.25rem;
+  gap: 0;
+  width: min(1200px, 100%);
+  margin-inline: auto;
 }
 
 .site-header__drawer a,
 .site-header__drawer button {
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: clamp(1.45rem, 7vw, 2rem);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text);
+  color: #f2f2f2;
   text-align: left;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid rgba(242, 242, 242, 0.12);
+  background: transparent;
 }
 
 .site-header__drawer a.active {
+  color: #e05a5a;
+}
+
+.site-header__drawer a:active,
+.site-header__drawer button:active {
   color: var(--accent);
 }
 
@@ -163,5 +196,19 @@
 
   .site-header__menu {
     display: grid;
+  }
+}
+
+@media (min-width: 901px) {
+  .site-header.is-open {
+    bottom: auto;
+    height: var(--header-h);
+    display: block;
+    overflow: visible;
+  }
+
+  .site-header__drawer,
+  .site-header.is-open .site-header__drawer {
+    display: none !important;
   }
 }

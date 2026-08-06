@@ -1,6 +1,6 @@
 export const site = {
   name: 'Fritz',
-  tagline: 'DJ · Colombia',
+  tagline: 'DJ Productor · Colombia',
   phone: '300 663 6377',
   phoneTel: '3006636377',
   email: 'djfritzcolombia@gmail.com',
@@ -11,7 +11,13 @@ export const site = {
   adminPassword: 'fritz2026',
 }
 
-export type MediaKind = 'photo' | 'video' | 'audio'
+export type ShowFolder = {
+  id: string
+  name: string
+  /** Ciudad / ubicación */
+  location: string
+  kind: 'photos' | 'videos'
+}
 
 export type ShowMedia = {
   id: string
@@ -21,6 +27,9 @@ export type ShowMedia = {
   thumb?: string
   date?: string
   venue?: string
+  /** @deprecated usar folderId */
+  folder?: string
+  folderId: string
 }
 
 export type AudioTrack = {
@@ -32,7 +41,6 @@ export type AudioTrack = {
   duration?: string
   price?: number
   downloadable?: boolean
-  /** ruta pública para descarga (remix) */
   downloadUrl?: string
 }
 
@@ -55,16 +63,6 @@ export type ShopProduct = {
   inStock: boolean
 }
 
-export type BeatBookingRequest = {
-  id: string
-  name: string
-  email: string
-  phone: string
-  style: string
-  notes: string
-  createdAt: string
-}
-
 export const shopCategoryLabels: Record<ShopCategory, string> = {
   camisas: 'Camisas oversize',
   gorras: 'Gorras',
@@ -79,48 +77,94 @@ export const formatPrice = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n)
 
-/** Contenido semilla — el panel /admin puede sobrescribirlo en el navegador */
+export function slugifyFolder(name: string) {
+  return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
+const photoFolders: ShowFolder[] = [
+  { id: 'selina-medellin', name: 'Selina Medellín', location: 'Medellín', kind: 'photos' },
+  { id: 'neutro', name: 'NEUTRO', location: 'Por confirmar', kind: 'photos' },
+  { id: 'onirico', name: 'ONIRICO', location: 'Por confirmar', kind: 'photos' },
+  { id: 'vintrash-bogota', name: 'VINTRASH BOGOTA', location: 'Bogotá', kind: 'photos' },
+  { id: 'pergola-clandestina', name: 'PERGOLA CLANDESTINA', location: 'Por confirmar', kind: 'photos' },
+  { id: 'la-jugada', name: 'LA JUGADA', location: 'Por confirmar', kind: 'photos' },
+  { id: 'la-movida', name: 'LA MOVIDA', location: 'Por confirmar', kind: 'photos' },
+  { id: 'rancho-mx', name: 'RANCHO MX', location: 'México', kind: 'photos' },
+  { id: 'callao', name: 'CALLAO', location: 'Por confirmar', kind: 'photos' },
+  { id: 'the-room-by-view', name: 'THE ROOM BY VIEW', location: 'Por confirmar', kind: 'photos' },
+  { id: 'zelavi', name: 'ZELAVI', location: 'Por confirmar', kind: 'photos' },
+  { id: 'odem', name: 'ODEM', location: 'Por confirmar', kind: 'photos' },
+  { id: 'video-club', name: 'VIDEO CLUB', location: 'Por confirmar', kind: 'photos' },
+  { id: 'zelect', name: 'ZELECT', location: 'Por confirmar', kind: 'photos' },
+  {
+    id: 'manana-sera-bonito-karol-g',
+    name: 'MAÑANA SERA BONITO KAROL G',
+    location: 'Tour',
+    kind: 'photos',
+  },
+  { id: 'vivanti', name: 'VIVANTI', location: 'Por confirmar', kind: 'photos' },
+]
+
+const videoFolders: ShowFolder[] = [
+  { id: 'vivanti-aqua-fest-1', name: 'VIVANTI AQUA FEST 1', location: 'Por confirmar', kind: 'videos' },
+  { id: 'vivanti-aqua-fest-2', name: 'VIVANTI AQUA FEST 2', location: 'Por confirmar', kind: 'videos' },
+]
+
 export type SiteContent = {
+  folders: ShowFolder[]
   shows: ShowMedia[]
   sets: AudioTrack[]
   beats: BeatProduct[]
-  videoSets: ShowMedia[]
   remixes: AudioTrack[]
   shop: ShopProduct[]
 }
 
 export const seedContent: SiteContent = {
+  folders: [...photoFolders, ...videoFolders],
   shows: [
     {
       id: 'selina-02630',
       type: 'photo',
-      title: 'Selina Medellín',
+      title: 'Selina Medellín 01',
       src: '/media/shows/selina-medellin/dsc02630.jpg',
       venue: 'Selina Medellín',
+      folder: 'Selina Medellín',
+      folderId: 'selina-medellin',
       date: '2026',
     },
     {
       id: 'selina-02642',
       type: 'photo',
-      title: 'Selina Medellín',
+      title: 'Selina Medellín 02',
       src: '/media/shows/selina-medellin/dsc02642.jpg',
       venue: 'Selina Medellín',
+      folder: 'Selina Medellín',
+      folderId: 'selina-medellin',
       date: '2026',
     },
     {
       id: 'selina-02616',
       type: 'photo',
-      title: 'Selina Medellín',
+      title: 'Selina Medellín 03',
       src: '/media/shows/selina-medellin/dsc02616.jpg',
       venue: 'Selina Medellín',
+      folder: 'Selina Medellín',
+      folderId: 'selina-medellin',
       date: '2026',
     },
     {
       id: 'selina-02612',
       type: 'photo',
-      title: 'Selina Medellín',
+      title: 'Selina Medellín 04',
       src: '/media/shows/selina-medellin/dsc02612.jpg',
       venue: 'Selina Medellín',
+      folder: 'Selina Medellín',
+      folderId: 'selina-medellin',
       date: '2026',
     },
   ],
@@ -160,7 +204,6 @@ export const seedContent: SiteContent = {
       inStock: true,
     },
   ],
-  videoSets: [],
   remixes: [
     {
       id: 'rx1',
@@ -209,4 +252,4 @@ export const seedContent: SiteContent = {
   ],
 }
 
-export const CONTENT_KEY = 'fritz-site-content-v2'
+export const CONTENT_KEY = 'fritz-site-content-v4'

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { AudioPlayer } from '../components/AudioPlayer'
 import { YoutubeEmbed } from '../components/YoutubeEmbed'
 import { useCart } from '../cart/CartContext'
@@ -8,10 +8,22 @@ import { formatPrice } from '../data/site'
 
 type Tab = 'sets' | 'beats' | 'videos' | 'remixes'
 
+function tabFromParam(value: string | null): Tab {
+  if (value === 'beats' || value === 'videos' || value === 'remixes' || value === 'sets') {
+    return value
+  }
+  return 'sets'
+}
+
 export function ListenPage() {
   const { content } = useContent()
   const { addItem } = useCart()
-  const [tab, setTab] = useState<Tab>('sets')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const tab = tabFromParam(searchParams.get('tab'))
+
+  const setTab = (next: Tab) => {
+    setSearchParams(next === 'sets' ? {} : { tab: next }, { replace: true })
+  }
 
   const tabs = useMemo(
     () =>
@@ -93,14 +105,19 @@ export function ListenPage() {
 
       {tab === 'videos' && (
         <div className="stack">
-          {content.videoSets.map((v) =>
-            v.type === 'youtube' ? (
+          {content.shows.filter((v) => v.type === 'youtube').length === 0 && (
+            <p style={{ color: 'var(--muted)' }}>
+              Los video sets viven en Shows → Videos. Agrégalos en Admin.
+            </p>
+          )}
+          {content.shows
+            .filter((v) => v.type === 'youtube')
+            .map((v) => (
               <div key={v.id}>
                 <p style={{ marginBottom: '0.5rem', color: 'var(--muted)' }}>{v.title}</p>
                 <YoutubeEmbed youtubeId={v.src} title={v.title} />
               </div>
-            ) : null,
-          )}
+            ))}
         </div>
       )}
 

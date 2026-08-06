@@ -2,24 +2,25 @@ import { Link } from 'react-router-dom'
 import { Hero } from '../components/Hero'
 import './HomePage.css'
 
+const stripLinks = [
+  { to: '/beats', label: 'Beats' },
+  { to: '/escuchar?tab=sets', label: 'Sets' },
+  { to: '/shows', label: 'Eventos' },
+  { to: '/shop', label: 'Merchandise' },
+  { to: '/escuchar?tab=remixes', label: 'Remix' },
+] as const
+
 export function HomePage() {
   return (
     <>
       <Hero />
-      <section className="home-strip">
+      <section className="home-strip" aria-label="Explorar">
         <div className="home-strip__grid">
-          <Link to="/escuchar" className="home-strip__item">
-            <span>Escuchar</span>
-            <strong>Sets · Beats · Remix</strong>
-          </Link>
-          <Link to="/shows" className="home-strip__item">
-            <span>Shows</span>
-            <strong>Fotos y videos</strong>
-          </Link>
-          <Link to="/beats" className="home-strip__item">
-            <span>Beats</span>
-            <strong>Compra o agenda</strong>
-          </Link>
+          {stripLinks.map((item) => (
+            <Link key={item.label} to={item.to} className="home-strip__item">
+              <strong>{item.label}</strong>
+            </Link>
+          ))}
         </div>
       </section>
     </>

@@ -72,9 +72,10 @@
 .hero__copy {
   color: var(--text-dim);
   font-size: clamp(1rem, 2.2vw, 1.2rem);
-  max-width: 28ch;
+  max-width: 36ch;
   margin-inline: auto;
   margin-bottom: 1.75rem;
+  line-height: 1.45;
 }
 
 .hero__cta {

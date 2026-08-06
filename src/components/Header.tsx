@@ -80,7 +80,12 @@ export function Header() {
         </button>
       </div>
 
-      <div className="site-header__drawer" id="mobile-nav" hidden={!open}>
+      <div
+        className="site-header__drawer"
+        id="mobile-nav"
+        hidden={!open}
+        aria-hidden={!open}
+      >
         <nav aria-label="Menú móvil">
           {[...leftNav, ...rightNav].map((item) => (
             <NavLink key={item.to} to={item.to} onClick={() => setOpen(false)}>

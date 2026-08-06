@@ -18,8 +18,12 @@ export function Hero() {
           height={217}
         />
         <h1 className="hero__title">Fritz</h1>
-        <p className="hero__tag">DJ · Colombia</p>
-        <p className="hero__copy">Shows, sets y energía en la pista.</p>
+        <p className="hero__tag">DJ Productor · Colombia</p>
+        <p className="hero__copy">
+          Gritos, coros y euforia desde Medellín. Sets que prenden la pista,
+          beats listos para firmar… y la próxima noche que todavía no te
+          cuentas.
+        </p>
         <div className="hero__cta">
           <Link className="btn btn--accent" to="/shows">
             Ver shows

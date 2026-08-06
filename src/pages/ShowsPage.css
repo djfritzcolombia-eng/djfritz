@@ -1,0 +1,88 @@
+.folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.1rem;
+}
+
+.folder-card {
+  display: grid;
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.28);
+  padding: 0;
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+
+.folder-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+
+.folder-card__body {
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.folder-card__body strong {
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 1rem;
+}
+
+.folder-card__body span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.folder-view {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.folder-card__empty {
+  aspect-ratio: 3 / 4;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(160deg, rgba(168, 50, 50, 0.2), transparent 55%),
+    #141414;
+  color: var(--muted);
+  font-family: var(--font-display);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.folder-card__empty--video {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(168, 50, 50, 0.35), transparent 55%),
+    #0d0d0d;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.folder-card__location {
+  color: var(--accent) !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.folder-view__meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.media-card img,
+.media-card > div:first-child {
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  object-fit: cover;
+  background: #000;
+  display: block;
+}

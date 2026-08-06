@@ -2,14 +2,20 @@ import { useMemo, useState } from 'react'
 import { site, type SiteContent } from '../data/site'
 import { useContent } from '../content/content-context'
 import { PhotoManager } from '../components/PhotoManager'
+import { VideoManager } from '../components/VideoManager'
 
 type Section = keyof SiteContent
 
 const sections: { id: Section; label: string; help: string }[] = [
   {
+    id: 'folders',
+    label: 'Folders JSON',
+    help: 'Lista de carpetas (fotos/videos) con ciudad.',
+  },
+  {
     id: 'shows',
     label: 'Shows JSON',
-    help: 'Avanzado: edita el JSON de shows. Para fotos usa el gestor visual de arriba.',
+    help: 'Avanzado: media de shows. Usa los gestores visuales de arriba.',
   },
   {
     id: 'sets',
@@ -20,11 +26,6 @@ const sections: { id: Section; label: string; help: string }[] = [
     id: 'beats',
     label: 'Beats en venta',
     help: 'Incluye price, bpm, cover y src del preview. inStock true/false.',
-  },
-  {
-    id: 'videoSets',
-    label: 'Video sets',
-    help: 'type "youtube" y src = ID del video (no la URL completa).',
   },
   {
     id: 'remixes',
@@ -120,7 +121,8 @@ export function AdminPage() {
       <h1 className="page__title">Admin</h1>
       <p className="page__lead">Sube, edita y elimina fotos. Clave: `adminPassword` en site.ts.</p>
 
-      <PhotoManager defaultVenue="Selina Medellín" />
+      <PhotoManager />
+      <VideoManager />
 
       <h2 style={{ color: 'var(--accent)', fontSize: '1.35rem', marginBottom: '0.75rem' }}>
         Otro contenido

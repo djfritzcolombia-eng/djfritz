@@ -6,7 +6,7 @@ const stripLinks = [
   { to: '/beats', label: 'Beats' },
   { to: '/escuchar?tab=sets', label: 'Sets' },
   { to: '/shows', label: 'Eventos' },
-  { to: '/shop', label: 'Merchandise' },
+  { to: '/shop', label: 'Merch' },
   { to: '/escuchar?tab=remixes', label: 'Remix' },
 ] as const
 

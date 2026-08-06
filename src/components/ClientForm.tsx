@@ -23,7 +23,7 @@ type Props = {
 
 const intentCopy: Record<ClientIntent, { label: string; lead: string }> = {
   merch: {
-    label: 'Mercancía',
+    label: 'Merch',
     lead: 'Regístrate para comprar merch. Pedimos datos de envío.',
   },
   beats: {

@@ -110,3 +110,24 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+.cart-drawer__checkout {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+}
+
+.cart-drawer__checkout .client-form {
+  max-width: none;
+  margin-top: 0.75rem;
+}
+
+.cart-drawer__checkout .linkish {
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,75 @@
+.client-form {
+  margin-top: 1.5rem;
+  max-width: 34rem;
+}
+
+.client-form__tabs {
+  margin: 0 0 1rem;
+}
+
+.client-form__lead {
+  color: var(--text-dim);
+  margin-bottom: 1.25rem;
+  max-width: 42ch;
+  line-height: 1.45;
+}
+
+.client-form__checks {
+  margin: 0;
+  padding: 0.85rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.client-form__checks legend {
+  padding: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.65rem;
+}
+
+.client-form__checks label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text);
+}
+
+.client-form__checks input {
+  width: auto;
+  min-height: 0;
+  accent-color: var(--accent);
+}
+
+.client-form__cart {
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--line);
+  color: var(--text-dim);
+  font-size: 0.92rem;
+}
+
+.client-form__cart strong {
+  display: block;
+  color: var(--accent);
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  margin-bottom: 0.5rem;
+}
+
+.client-form__cart ul {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.client-form__ok {
+  color: var(--accent);
+}

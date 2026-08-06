@@ -13,9 +13,14 @@ Sitio oficial (`www.djfritz.com`).
 
 ## Panel interno
 
-Abre `/admin` (clave en `src/data/site.ts` → `adminPassword`, por defecto `fritz2026`).
+Abre `/admin`
 
-El panel guarda en el navegador (localStorage) para pruebas. Para producción definitiva exporta JSON o edita `src/data/site.ts` y haz deploy.
+- Usuario: `Fritz`
+- Clave inicial: `Pruebas123`
+
+Dentro del panel puedes cambiar la clave (sección Seguridad). Se guarda en ese navegador.
+
+El panel guarda contenido en localStorage para pruebas. Para producción definitiva exporta JSON o edita `src/data/site.ts` y haz deploy.
 
 ## Carrito
 

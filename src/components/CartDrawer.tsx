@@ -1,34 +1,72 @@
-import { site, formatPrice } from '../data/site'
+import { useState } from 'react'
+import { formatPrice } from '../data/site'
 import { useCart } from '../cart/CartContext'
+import { ClientForm } from './ClientForm'
 import './CartDrawer.css'
 
 export function CartDrawer() {
   const { items, total, open, setOpen, removeItem, setQty, clear } = useCart()
+  const [checkout, setCheckout] = useState(false)
 
   if (!open) return null
 
-  const checkoutWhatsApp = () => {
-    const lines = items.map(
-      (i) => `• ${i.name} x${i.qty} — ${formatPrice(i.price * i.qty)} (${i.kind})`,
-    )
-    const text = encodeURIComponent(
-      `Hola Fritz, quiero comprar:\n${lines.join('\n')}\nTotal: ${formatPrice(total)}`,
-    )
-    window.open(`https://wa.me/${site.whatsapp}?text=${text}`, '_blank')
-  }
+  const cartLines = items.map((i) => ({
+    name: i.name,
+    qty: i.qty,
+    priceLabel: formatPrice(i.price * i.qty),
+    kind: i.kind,
+  }))
+
+  const lockedIntent =
+    items.every((i) => i.kind === 'beat')
+      ? ('beats' as const)
+      : items.every((i) => i.kind === 'merch')
+        ? ('merch' as const)
+        : ('merch' as const)
 
   return (
     <div className="cart-drawer" role="dialog" aria-modal="true" aria-label="Carrito">
-      <button className="cart-drawer__backdrop" type="button" aria-label="Cerrar" onClick={() => setOpen(false)} />
+      <button
+        className="cart-drawer__backdrop"
+        type="button"
+        aria-label="Cerrar"
+        onClick={() => {
+          setCheckout(false)
+          setOpen(false)
+        }}
+      />
       <aside className="cart-drawer__panel">
         <header>
-          <h2>Carrito</h2>
-          <button type="button" onClick={() => setOpen(false)}>
+          <h2>{checkout ? 'Registro de compra' : 'Carrito'}</h2>
+          <button
+            type="button"
+            onClick={() => {
+              setCheckout(false)
+              setOpen(false)
+            }}
+          >
             Cerrar
           </button>
         </header>
 
-        {items.length === 0 ? (
+        {checkout ? (
+          <div className="cart-drawer__checkout">
+            <button type="button" className="linkish" onClick={() => setCheckout(false)}>
+              ← Volver al carrito
+            </button>
+            <ClientForm
+              lockedIntent={lockedIntent}
+              cartLines={cartLines}
+              cartTotalLabel={formatPrice(total)}
+              submitLabel="Confirmar por WhatsApp"
+              onSuccess={() => {
+                clear()
+                setCheckout(false)
+                setOpen(false)
+              }}
+            />
+          </div>
+        ) : items.length === 0 ? (
           <p className="cart-drawer__empty">Tu carrito está vacío.</p>
         ) : (
           <ul className="cart-drawer__list">
@@ -56,20 +94,27 @@ export function CartDrawer() {
           </ul>
         )}
 
-        <footer>
-          <p>
-            Total <strong>{formatPrice(total)}</strong>
-          </p>
-          <button type="button" className="btn btn--accent" disabled={!items.length} onClick={checkoutWhatsApp}>
-            Comprar por WhatsApp
-          </button>
-          <button type="button" className="btn btn--ghost" disabled={!items.length} onClick={clear}>
-            Vaciar
-          </button>
-          <p className="cart-drawer__note">
-            Pagos online (Nequi / tarjeta) se conectan después. Por ahora cierras por WhatsApp o correo.
-          </p>
-        </footer>
+        {!checkout && (
+          <footer>
+            <p>
+              Total <strong>{formatPrice(total)}</strong>
+            </p>
+            <button
+              type="button"
+              className="btn btn--accent"
+              disabled={!items.length}
+              onClick={() => setCheckout(true)}
+            >
+              Continuar registro
+            </button>
+            <button type="button" className="btn btn--ghost" disabled={!items.length} onClick={clear}>
+              Vaciar
+            </button>
+            <p className="cart-drawer__note">
+              Beats se envían por correo. Merch pide dirección de envío. Cierras por WhatsApp.
+            </p>
+          </footer>
+        )}
       </aside>
     </div>
   )

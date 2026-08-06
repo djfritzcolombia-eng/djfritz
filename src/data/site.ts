@@ -7,8 +7,6 @@ export const site = {
   domain: 'www.djfritz.com',
   url: 'https://www.djfritz.com',
   whatsapp: '573006636377',
-  /** Cambia esta clave en producción (panel /admin) */
-  adminPassword: 'fritz2026',
 }
 
 export type ShowFolder = {
